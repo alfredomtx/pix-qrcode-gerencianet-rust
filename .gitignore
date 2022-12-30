@@ -2,3 +2,4 @@
 *.p12
 configuration/development.yaml
 configuration/production.yaml
+*.png
