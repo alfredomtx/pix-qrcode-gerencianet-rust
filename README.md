@@ -1,7 +1,7 @@
 # What is this project?
-It's a simple working demonstration for the generation of PIX QR Code from [GerenciaNet](https://gerencianet.com.br/).
+It's a simple working demonstration for the generation of PIX QR Code from [Gerencianet](https://gerencianet.com.br/).
  
-[GerenciaNet](https://dev.gerencianet.com.br/docs) has amazing SDKs for many languages, but Rust is not one of them.
+[Gerencianet](https://dev.gerencianet.com.br/docs) has amazing SDKs for many languages, but Rust is not one of them.
  
 This app is supposed to be the **simplest** implementation of some of their endpoints for PIX QR Code generation, to be used as basis for anyone who is looking to integrate their Rust apps with GerenciaNet 🙂
 
