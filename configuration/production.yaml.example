@@ -1,0 +1,10 @@
+gerencianet:
+  api_url: "https://api-pix.gerencianet.com.br"
+  chave: "your-pix-key"
+  sandbox: false
+  debug: false
+  credentials:
+    client_id: "Client_Id_xxx"
+    client_secret: "Client_xxx"
+    # note that the path starts with ./
+    certificado_pix: "./certificates/producao.p12"

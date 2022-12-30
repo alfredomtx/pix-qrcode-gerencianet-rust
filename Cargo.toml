@@ -1,0 +1,24 @@
+[package]
+name = "pix-qrcode-gerencianet-rust"
+version = "0.1.0"
+edition = "2021"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }
+
+[dependencies]
+# runtime
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+reqwest = { version = "0.11", default-features = false, features = ["json", "native-tls"] }
+# error handling
+anyhow = "1.0.68"
+# serde
+serde = "1.0.147"
+serde_json = "1"
+serde-aux = "4.1.2"
+serde_yaml = "0.9.16"
+# image
+image = "0.23.14"
+# others
+base64 = "0.20.0"
+secrecy = { version = "0.8.0", features = ["serde"] }

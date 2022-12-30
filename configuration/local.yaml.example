@@ -1,0 +1,11 @@
+gerencianet:
+  api_url: "https://api-pix-h.gerencianet.com.br"
+  chave: "your-pix-key"
+  sandbox: true
+  debug: true
+  credentials:
+    client_id: "Client_Id_xxx"
+    client_secret: "Client_xxx"
+    # note that the path starts with ./
+    certificado_pix: "./certificates/homologacao.p12"
+
