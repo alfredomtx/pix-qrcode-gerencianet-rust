@@ -1,5 +1,5 @@
 
-use crate::gerencianet::{Configuration, Client};
+use crate::gerencianet::{Configuration};
 use serde::{Deserialize};
 use serde_json::json;
 
@@ -11,10 +11,7 @@ pub struct AuthResponse {
     pub scope: String,
 }
 
-pub async fn get_token(configuration: &Configuration) -> Result<String, anyhow::Error> {
-    let client = Client::new(&configuration.credentials, None)
-        .map_err(|e| anyhow::anyhow!(format!("Failed to instantiate `Client`: {}", e)))?;
-
+pub async fn get_token(client: &reqwest::Client, configuration: &Configuration) -> Result<String, anyhow::Error> {
     let body = json!({"grant_type": "client_credentials"});
 
     let response = client

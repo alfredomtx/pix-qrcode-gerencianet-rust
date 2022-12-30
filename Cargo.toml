@@ -1,5 +1,5 @@
 [package]
-name = "pix-qrcode-gerencianet-rust"
+name = "pix-qrcode-gerencianet"
 version = "0.1.0"
 edition = "2021"
 

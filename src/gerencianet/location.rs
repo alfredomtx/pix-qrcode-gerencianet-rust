@@ -1,5 +1,4 @@
 
-use reqwest::Client;
 use serde::{Deserialize};
 use crate::gerencianet::{Configuration};
 
@@ -10,7 +9,7 @@ pub struct LocationResponse {
     pub imagem_qrcode: String,
 }
 
-pub async fn generate_qr_code(client: &Client, configuration: &Configuration, location_id: i64) -> Result<LocationResponse, anyhow::Error>{
+pub async fn generate_qr_code(client: &reqwest::Client, configuration: &Configuration, location_id: i64) -> Result<LocationResponse, anyhow::Error>{
     let response = client
         .get(format!("{}/v2/loc/{}/qrcode", &configuration.api_url, location_id))
         .send()

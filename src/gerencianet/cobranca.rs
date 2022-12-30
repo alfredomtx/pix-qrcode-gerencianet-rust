@@ -1,5 +1,4 @@
 
-use reqwest::Client;
 use serde::{Serialize, Deserialize};
 use serde_json::{json};
 
@@ -59,7 +58,7 @@ pub struct LocationResponse {
 }
 
 
-pub async fn do_cobranca(client: &Client, configuration: &Configuration) -> Result<CobrancaResponse, anyhow::Error>{
+pub async fn do_cobranca(client: &reqwest::Client, configuration: &Configuration) -> Result<CobrancaResponse, anyhow::Error>{
     let calendario = Calendario {
         expiracao: 3600,
     };

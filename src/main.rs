@@ -1,16 +1,12 @@
 #![allow(unused_parens)]
 #![allow(clippy::needless_return)]
-#![allow(unused_variables)]
 
-use pix_qrcode_gerencianet_rust::{
+use pix_qrcode_gerencianet::{
     gerencianet::{get_token, Credentials, do_cobranca, Client, generate_qr_code, Configuration},
 };
-use image;
-
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
-
     // Load initial configuration (read from yaml file)
     let configuration = Configuration::new().unwrap();
 
@@ -19,11 +15,12 @@ async fn main() -> std::io::Result<()> {
 
     // Create a client instance and perform the authentication request
     let client = Client::new(&credentials, None).unwrap();
-    let access_token = get_token(&configuration).await.unwrap();
+    let access_token = get_token(&client, &configuration).await.unwrap();
 
     // Create a new client with the `access_token` as default header
     let authenticated_client = Client::new(&credentials, Some(access_token)).unwrap();
 
+    // Create a `cobranca`
     let cobranca = do_cobranca(&authenticated_client, &configuration).await.unwrap();
 
     // Get the QR code base64
@@ -47,6 +44,5 @@ fn save_qr_code_image(base64: String) -> Result<(), anyhow::Error> {
 
     image.save("qrcode.png")
         .map_err(|e| anyhow::anyhow!(format!("Failed to save qr code image: {}", e)))?;
-
     return Ok(());
 }
