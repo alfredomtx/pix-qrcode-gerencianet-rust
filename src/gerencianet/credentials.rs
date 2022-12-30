@@ -1,8 +1,8 @@
+use crate::gerencianet::{Configuration};
 use serde::{Deserialize};
 use std::path::Path;
 use secrecy::Secret;
 
-use crate::gerencianet::{Configuration};
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct Credentials {
@@ -12,7 +12,7 @@ pub struct Credentials {
 }
 
 impl Credentials {
-    pub fn new(configuration: &Configuration) -> Result<Self, anyhow::Error> {
+    pub fn new(configuration: &Configuration) -> Result<Credentials, anyhow::Error> {
         let credentials = configuration.credentials.clone();
 
         if (Path::new(&credentials.certificado_pix).exists() == false){

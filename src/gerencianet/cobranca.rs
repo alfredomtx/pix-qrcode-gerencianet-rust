@@ -1,8 +1,10 @@
 
+use crate::gerencianet::Configuration;
 use serde::{Serialize, Deserialize};
 use serde_json::{json};
 
-use super::Configuration;
+
+pub struct Cobranca;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -57,46 +59,50 @@ pub struct LocationResponse {
     pub criacao: String,
 }
 
+impl Cobranca {
 
-pub async fn do_cobranca(client: &reqwest::Client, configuration: &Configuration) -> Result<CobrancaResponse, anyhow::Error>{
-    let calendario = Calendario {
-        expiracao: 3600,
-    };
-    
-    let devedor = Devedor {
-        cpf: "02902720092".to_string(),
-        nome: "Francisco da Silva".to_string(),
-    };
+    pub async fn do_cobranca(client: &reqwest::Client, configuration: &Configuration) -> Result<CobrancaResponse, anyhow::Error>{
+        let calendario = Calendario {
+            expiracao: 3600,
+        };
+        
+        let devedor = Devedor {
+            cpf: "60882698044".to_string(), // https://www.4devs.com.br/gerador_de_cpf
+            nome: "Test Name".to_string(),
+        };
 
-    let valor = Valor {
-        original: "30.00".to_string(),
-    };
+        let valor = Valor {
+            original: "30.00".to_string(),
+        };
 
-    let cobranca = CobrancaRequest {
-        calendario,
-        devedor,
-        valor,
-        chave: configuration.chave.clone(),
-        solicitacao_pagador: "Test".to_string(),
-    };
+        let cobranca = CobrancaRequest {
+            calendario,
+            devedor,
+            valor,
+            chave: configuration.chave.clone(),
+            solicitacao_pagador: "Test".to_string(),
+        };
 
-    let json = serde_json::to_value(&cobranca)
-        .map_err(|e| anyhow::anyhow!(format!("Failed to parse `cobranca` to json: {}", e)))?;
+        let cobranca_json = serde_json::to_value(&cobranca)
+            .map_err(|e| anyhow::anyhow!(format!("Failed to parse `cobranca` to json: {}", e)))?;
 
-    let body = json!(json);
+        let body = json!(cobranca_json);
 
-    let response = client
-        .post(format!("{}/v2/cob", &configuration.api_url))
-        .json(&body)
-        .send()
-        .await
-        .map_err(|e| anyhow::anyhow!(format!("Failed to perform request: {}", e)))?;
+        let response = client
+            .post(format!("{}/v2/cob", &configuration.api_url))
+            .json(&body)
+            .send()
+            .await
+            .map_err(|e| anyhow::anyhow!(format!("Failed to perform request: {}", e)))?;
 
-    let response_body = response.text().await
-        .map_err(|e| anyhow::anyhow!(format!("Failed to get the response body: {}", e)))?;
+        let response_body = response.text().await
+            .map_err(|e| anyhow::anyhow!(format!("Failed to get the response body: {}", e)))?;
 
-    let cobranca_response: CobrancaResponse = serde_json::from_str(&response_body)
-        .map_err(|e| anyhow::anyhow!(format!("Failed to parse `response_body` to `CobrancaResponse`: {}\n\nResponse:\n{}\n", e, response_body)))?;
+        let cobranca_response: CobrancaResponse = serde_json::from_str(&response_body)
+            .map_err(|e| anyhow::anyhow!(format!("Failed to parse `response_body` to `CobrancaResponse`: {}\n\nResponse:\n{}\n", e, response_body)))?;
 
-    return Ok(cobranca_response);
+        return Ok(cobranca_response);
+    }
+
 }
+

@@ -7,7 +7,7 @@ use std::fs::File;
 /// The possible runtime environment for our application.
 #[derive(Debug, Clone, Deserialize)]
 pub enum Environment {
-    Local,
+    Development,
     Production
 }
 
@@ -27,15 +27,16 @@ pub struct Configuration {
 
 
 impl Configuration {
-    pub fn new() -> Result<Self, anyhow::Error> {
+
+    pub fn new() -> Result<Configuration, anyhow::Error> {
         let base_path = env::current_dir()
             .map_err(|e| anyhow::anyhow!(format!("Failed to determine the current directory: {}", e)))?;
         let configuration_directory = base_path.join("configuration");
 
         // Detect the running environment
-        // Default to `local` if unspecified
+        // Default to `development` if unspecified
         let environment: Environment = env::var("APP_ENVIRONMENT")
-            .unwrap_or_else(|_| "local".into())
+            .unwrap_or_else(|_| "development".into())
             .try_into()
             .map_err(|e| anyhow::anyhow!(format!("Failed to parse APP_ENVIRONMENT: {}", e)))?;
 
@@ -56,7 +57,7 @@ impl Configuration {
 impl Environment {
     pub fn as_str(&self) -> &'static str {
         return match self {
-            Environment::Local => "local",
+            Environment::Development => "development",
             Environment::Production => "production"
         };
     }
@@ -67,10 +68,10 @@ impl TryFrom<String> for Environment {
 
     fn try_from(s: String) -> Result<Self, Self::Error> {
         return match s.to_lowercase().as_str() {
-            "local" => Ok(Self::Local),
+            "development" => Ok(Self::Development),
             "production" => Ok(Self::Production),
             other => Err(format!(
-                "{} is not a supported environment. Use either 'local' or 'production'.",
+                "{} is not a supported environment. Use either 'development' or 'production'.",
                 other
             )),
         };

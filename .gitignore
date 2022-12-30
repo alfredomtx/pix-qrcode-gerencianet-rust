@@ -1,4 +1,4 @@
 /target
 *.p12
-configuration/local.yaml
+configuration/development.yaml
 configuration/production.yaml

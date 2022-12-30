@@ -2,7 +2,7 @@
 #![allow(clippy::needless_return)]
 
 use pix_qrcode_gerencianet::{
-    gerencianet::{get_token, Credentials, do_cobranca, Client, generate_qr_code, Configuration},
+    gerencianet::{Auth, Credentials, Cobranca, Client, Location, Configuration},
 };
 
 #[tokio::main]
@@ -15,16 +15,16 @@ async fn main() -> std::io::Result<()> {
 
     // Create a client instance and perform the authentication request
     let client = Client::new(&credentials, None).unwrap();
-    let access_token = get_token(&client, &configuration).await.unwrap();
+    let access_token = Auth::get_token(&client, &configuration).await.unwrap();
 
     // Create a new client with the `access_token` as default header
     let authenticated_client = Client::new(&credentials, Some(access_token)).unwrap();
 
     // Create a `cobranca`
-    let cobranca = do_cobranca(&authenticated_client, &configuration).await.unwrap();
+    let cobranca = Cobranca::do_cobranca(&authenticated_client, &configuration).await.unwrap();
 
     // Get the QR code base64
-    let location = generate_qr_code(&authenticated_client, &configuration, cobranca.loc.id).await.unwrap();
+    let location = Location::generate_qr_code(&authenticated_client, &configuration, cobranca.loc.id).await.unwrap();
 
     dbg!(&location);
     // Save it as .png
